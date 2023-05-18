@@ -4,7 +4,8 @@
   "description": "A registered user make a poll with answers. User shares the url and guests vote with an input string. User can delete answers by guest string list.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "npm run build && node dist/server.js"
   },
   "keywords": [],
   "author": "",
