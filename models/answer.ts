@@ -1,33 +1,38 @@
 import { Model, DataTypes } from 'sequelize';
+import Question from './question';
 const { sequelize } = require('../config/config');
 
-class User extends Model {
+class Answer extends Model {
     public id!: number;
-    public name!: string;
-    public email!: string;
+    public title!: string;
+    public questionId!: string;
 }
 
-User.init(
+Answer.init(
     {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true
         },
-        name: {
+        title: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
         },
-        email: {
+        questionId: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
+            references: {
+                model: Question,
+                key: 'id'
+            }
         }
     },
     {
-        tableName: 'users',
+        tableName: 'answers',
         sequelize
     }
 );
 
-export default User;
+Answer.belongsTo(Question, { foreignKey: 'questionId' });
+
+export default Question;

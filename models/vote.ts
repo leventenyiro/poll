@@ -1,33 +1,38 @@
 import { Model, DataTypes } from 'sequelize';
+import Answer from './answer';
 const { sequelize } = require('../config/config');
 
-class User extends Model {
+class Vote extends Model {
     public id!: number;
-    public name!: string;
-    public email!: string;
+    public username!: string;
+    public answerId!: string;
 }
 
-User.init(
+Vote.init(
     {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true
         },
-        name: {
+        username: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
         },
-        email: {
+        answerId: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
+            references: {
+                model: Answer,
+                key: 'id'
+            }
         }
     },
     {
-        tableName: 'users',
+        tableName: 'votes',
         sequelize
     }
 );
 
-export default User;
+Vote.belongsTo(Answer, { foreignKey: 'answerId' });
+
+export default Vote;
