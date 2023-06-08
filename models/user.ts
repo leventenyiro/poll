@@ -29,7 +29,9 @@ User.init(
     password: DataTypes.STRING,
   },
   {
-    sequelize: new Sequelize(), // Pass your Sequelize instance here
+    sequelize: new Sequelize({
+      dialect: 'mysql',
+    }),
     modelName: 'User',
   }
 );
