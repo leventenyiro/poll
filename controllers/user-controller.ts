@@ -4,6 +4,15 @@ import { v4 as uuidv4 } from 'uuid';
 
 export class UserController {
   public static async getUser(req: Request, res: Response): Promise<void> {
+    try {
+      res.json(User.findAll());
+    } catch (error) {
+      console.error('Error retrieving user:', error);
+      res.status(500).json({ error: 'Failed to retrieve user' });
+    }
+  }
+
+  public static async getUserById(req: Request, res: Response): Promise<void> {
     const userId = req.params.id;
 
     try {
