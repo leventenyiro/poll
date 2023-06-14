@@ -1,4 +1,5 @@
 const express = require('express');
+const userRouter = require('./routes/user-router');
 const db = require('./models');
 
 const app = express();
@@ -12,15 +13,9 @@ db.sequelize.sync()
     console.error('Error synchronizing database:', error);
   });
 
-app.get('/users', async (req, res) => {
-  try {
-    const users = await db.User.findAll();
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server Error' });
-  }
-});
+app.use(express.json());
+
+app.use('/user', userRouter);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
