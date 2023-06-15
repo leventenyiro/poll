@@ -14,7 +14,11 @@ const userService = require('../services/user-service');
 exports.getUserById = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await db.User.findByPk(id);
+    const user = await db.User.findOne({
+      where: { id },
+      attributes: ['name', 'email']
+    });
+
     if (user) {
       res.json(user);
     } else {
@@ -32,6 +36,19 @@ exports.createUser = async (req, res) => {
   try {
     const newUser = await userService.createUser({ name, email, password, passwordAgain });
     res.json(newUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { name, email } = req.body;
+
+  try {
+    const updatedUser = await userService.updateUser(id, { name, email });
+    res.json(updatedUser);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
