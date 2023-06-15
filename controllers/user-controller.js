@@ -1,4 +1,3 @@
-const db = require('../models');
 const userService = require('../services/user-service');
 
 /*exports.getAllUsers = async (req, res) => {
@@ -11,7 +10,7 @@ const userService = require('../services/user-service');
   }
 };*/
 
-exports.getUserById = async (req, res) => {
+/*exports.getUserById = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await db.User.findOne({
@@ -28,14 +27,14 @@ exports.getUserById = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
   }
-};
+};*/
 
 exports.createUser = async (req, res) => {
   const { username, email, password, passwordAgain } = req.body;
 
   try {
-    const newUser = await userService.createUser({ username, email, password, passwordAgain });
-    res.json(newUser);
+    await userService.createUser({ username, email, password, passwordAgain });
+    res.json();
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
