@@ -9,6 +9,8 @@ https://www.figma.com/file/CrkNPgxupXR9IG7Y6xoHL2/Poll?type=whiteboard&t=xoCWlfR
 
 ## To run migration
 ``` sh ./migrate.sh ```
+or
+``` npm run migrate ```
 
 ## Run backend
 ``` npm run start ```

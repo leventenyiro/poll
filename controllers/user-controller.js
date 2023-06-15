@@ -16,7 +16,7 @@ exports.getUserById = async (req, res) => {
   try {
     const user = await db.User.findOne({
       where: { id },
-      attributes: ['name', 'email']
+      attributes: ['username', 'email']
     });
 
     if (user) {
@@ -31,10 +31,10 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
-  const { name, email, password, passwordAgain } = req.body;
+  const { username, email, password, passwordAgain } = req.body;
 
   try {
-    const newUser = await userService.createUser({ name, email, password, passwordAgain });
+    const newUser = await userService.createUser({ username, email, password, passwordAgain });
     res.json(newUser);
   } catch (error) {
     console.error(error);
@@ -44,10 +44,10 @@ exports.createUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
-  const { name, email } = req.body;
+  const { username, email } = req.body;
 
   try {
-    const updatedUser = await userService.updateUser(id, { name, email });
+    const updatedUser = await userService.updateUser(id, { username, email });
     res.json(updatedUser);
   } catch (error) {
     console.error(error);

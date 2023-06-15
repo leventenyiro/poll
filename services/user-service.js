@@ -3,7 +3,7 @@ const db = require('../models');
 const { v4: uuidv4 } = require('uuid');
 
 exports.createUser = async (userData) => {
-    const { name, email, password, passwordAgain } = userData;
+    const { username, email, password, passwordAgain } = userData;
 
     if (password !== passwordAgain) {
         throw new Error('Passwords do not match!');
@@ -14,7 +14,7 @@ exports.createUser = async (userData) => {
 
     const newUser = await db.User.create({
         id: id,
-        name,
+        username,
         email,
         password: hashedPassword,
     });
@@ -30,7 +30,7 @@ exports.updateUser = async (id, userData) => {
             throw new Error('User not found!');
         }
 
-        user.name = userData.name || user.name;
+        user.username = userData.username || user.username;
         user.email = userData.email || user.email;
 
         await user.save();
