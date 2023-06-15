@@ -1,6 +1,38 @@
 const bcrypt = require('bcrypt');
 const db = require('../models');
 const { v4: uuidv4 } = require('uuid');
+require('dotenv').config();
+const { Op } = require('sequelize');
+
+exports.login = async (userData) => {
+    const { usernameEmail, password } = userData;
+
+    try {
+        const user = await db.User.findOne({
+          where: {
+            [Op.or]: [{ username: usernameEmail }, { email: usernameEmail }],
+          },
+        });
+    
+        if (!user) {
+          return null;
+        }
+    
+        // const isPasswordValid = await user.comparePassword(password);
+    
+        // if (!isPasswordValid) {
+        //   return null;
+        // }
+    
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        console.log(token);
+    
+        return token;
+      } catch (error) {
+        throw new Error('Unable to login');
+      }
+};
 
 exports.createUser = async (userData) => {
     const { username, email, password, passwordAgain } = userData;

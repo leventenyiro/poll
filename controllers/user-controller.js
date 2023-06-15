@@ -29,6 +29,18 @@ const userService = require('../services/user-service');
   }
 };*/
 
+exports.login = async (req, res) => {
+  const { usernameEmail, password } = req.body;
+
+  try {
+    const jwt = await userService.login({ usernameEmail, password });
+    res.json(jwt);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+}
+
 exports.createUser = async (req, res) => {
   const { username, email, password, passwordAgain } = req.body;
 
