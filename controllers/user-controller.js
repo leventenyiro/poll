@@ -1,7 +1,7 @@
 const db = require('../models');
-const { v4: uuidv4 } = require('uuid');
+const userService = require('../services/user-service');
 
-exports.getAllUsers = async (req, res) => {
+/*exports.getAllUsers = async (req, res) => {
   try {
     const users = await db.User.findAll();
     res.json(users);
@@ -9,7 +9,7 @@ exports.getAllUsers = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
   }
-};
+};*/
 
 exports.getUserById = async (req, res) => {
   const { id } = req.params;
@@ -28,9 +28,9 @@ exports.getUserById = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   const { name, email, password, passwordAgain } = req.body;
+
   try {
-    const id = uuidv4();
-    const newUser = await db.User.create({ id, name, email, password });
+    const newUser = await userService.createUser({ name, email, password, passwordAgain });
     res.json(newUser);
   } catch (error) {
     console.error(error);
