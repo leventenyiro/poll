@@ -3,45 +3,37 @@ const db = require('../models');
 const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 const { Op } = require('sequelize');
+const jwt = require('jsonwebtoken');
 
 exports.login = async (userData) => {
     const { usernameEmail, password } = userData;
 
     try {
         const user = await db.User.findOne({
-          where: {
-            [Op.or]: [{ username: usernameEmail }, { email: usernameEmail }],
-          },
+            where: {
+                [Op.or]: [{ username: usernameEmail }, { email: usernameEmail }],
+            },
         });
-    
-        if (!user) {
-          return null;
-        }
-    
-        // const isPasswordValid = await user.comparePassword(password);
-    
-        // if (!isPasswordValid) {
-        //   return null;
-        // }
-    
-        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        console.log(token);
-    
+        if (!user) {
+            throw new Error('Unable to login');
+        }
+
+        await isPasswordValid(password, user.password);
+
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '168h' });
+
         return token;
-      } catch (error) {
+    } catch (error) {
         throw new Error('Unable to login');
-      }
+    }
 };
 
 exports.createUser = async (userData) => {
     const { username, email, password, passwordAgain } = userData;
 
-    if (password !== passwordAgain) {
-        throw new Error('Passwords do not match!');
-    }
+    const hashedPassword = await createPassword(password, passwordAgain);
 
-    const hashedPassword = await bcrypt.hash(password, 10);
     const id = uuidv4();
 
     const newUser = await db.User.create({
@@ -56,7 +48,7 @@ exports.createUser = async (userData) => {
 
 exports.updateUser = async (id, userData) => {
     try {
-        const user = await db.User.findByPk();
+        const user = await db.User.findByPk(id);
 
         if (!user) {
             throw new Error('User not found!');
@@ -72,3 +64,60 @@ exports.updateUser = async (id, userData) => {
         throw new Error('Failed to update user!');
     }
 };
+
+exports.updatePassword = async (id, userData) => {
+    const { passwordOld, password, passwordAgain } = userData;
+
+    try {
+        const user = await db.User.findByPk(id);
+
+        if (!user) {
+            throw new Error('User not found!');
+        }
+
+        await isPasswordValid(passwordOld, user.password);
+
+        const hashedPassword = createPassword(password, passwordAgain);
+
+        user.password = hashedPassword || user.password;
+
+        await user.save();
+
+        return user;
+    } catch (error) {
+        throw new Error('Failed to update password!');
+    }
+};
+
+exports.deleteUser = async (id) => {
+    try {
+        const user = await db.User.findByPk(id);
+
+        if (!user) {
+            throw new Error('User not found!');
+        }
+
+        user.delete();
+
+        return user;
+    } catch (error) {
+        throw new Error('Failed to update user!');
+    }
+};
+
+async function createPassword(password, passwordAgain) {
+    if (password !== passwordAgain) {
+        throw new Error('Passwords do not match!');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return hashedPassword;
+}
+
+async function isPasswordValid(password, userPassword) {
+    const isPasswordValid = await bcrypt.compare(password, userPassword);
+
+    if (!isPasswordValid) {
+        throw new Error('Unable to login');
+    }
+}

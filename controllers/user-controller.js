@@ -34,7 +34,7 @@ exports.login = async (req, res) => {
 
   try {
     const jwt = await userService.login({ usernameEmail, password });
-    res.json(jwt);
+    res.status(202).send(jwt);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
@@ -46,7 +46,7 @@ exports.createUser = async (req, res) => {
 
   try {
     await userService.createUser({ username, email, password, passwordAgain });
-    res.json();
+    res.status(201).send();
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
@@ -58,8 +58,33 @@ exports.updateUser = async (req, res) => {
   const { username, email } = req.body;
 
   try {
-    const updatedUser = await userService.updateUser(id, { username, email });
-    res.json(updatedUser);
+    await userService.updateUser(id, { username, email });
+    res.status(200);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+exports.updatePassword = async (req, res) => {
+  const { id } = req.params;
+  const { passwordOld, password, passwordAgain } = req.body;
+
+  try {
+    await userService.updatePassword(id, { passwordOld, password, passwordAgain });
+    res.status(200).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await userService.deleteUser(id);
+    res.status(200).send();
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
