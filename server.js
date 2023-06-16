@@ -1,6 +1,8 @@
 const express = require('express');
 const userRouter = require('./routes/user-router');
 const db = require('./models');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const app = express();
 const port = 3000;

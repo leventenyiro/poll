@@ -12,6 +12,7 @@ const userService = require('../services/user-service');
 
 /*exports.getUserById = async (req, res) => {
   const { id } = req.params;
+
   try {
     const user = await db.User.findOne({
       where: { id },
@@ -28,6 +29,21 @@ const userService = require('../services/user-service');
     res.status(500).json({ message: 'Server Error' });
   }
 };*/
+
+exports.getUser = async (req, res) => {
+  try {
+    const user = await userService.getUser(req.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+}
 
 exports.login = async (req, res) => {
   const { usernameEmail, password } = req.body;

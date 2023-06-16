@@ -1,10 +1,10 @@
 const express = require('express');
 const userController = require('../controllers/user-controller');
-
+const auth = require('../middleware/auth');
 const router = express.Router();
 
 // router.get('/', userController.getAllUsers);
-// router.get('/', userController.getUser); // it will be implemented
+router.get('/', auth.jwtMiddleware, userController.getUser);
 router.post('/', userController.createUser);
 // router.put('/:id', userController.updateUser); // it will be without id
 router.post('/login', userController.login);

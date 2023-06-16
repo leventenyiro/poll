@@ -1,9 +1,18 @@
 const bcrypt = require('bcrypt');
 const db = require('../models');
 const { v4: uuidv4 } = require('uuid');
-require('dotenv').config();
 const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
+exports.getUser = async (id) => {
+    const user = await db.User.findOne({
+        where: { id },
+        attributes: ['username', 'email']
+    });
+
+    return user;
+};
 
 exports.login = async (userData) => {
     const { usernameEmail, password } = userData;
