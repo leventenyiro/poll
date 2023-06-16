@@ -1,7 +1,6 @@
-const db = require('../models');
-const { v4: uuidv4 } = require('uuid');
+const userService = require('../services/user-service');
 
-exports.getAllUsers = async (req, res) => {
+/*exports.getAllUsers = async (req, res) => {
   try {
     const users = await db.User.findAll();
     res.json(users);
@@ -9,12 +8,16 @@ exports.getAllUsers = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
   }
-};
+};*/
 
-exports.getUserById = async (req, res) => {
+/*exports.getUserById = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await db.User.findByPk(id);
+    const user = await db.User.findOne({
+      where: { id },
+      attributes: ['username', 'email']
+    });
+
     if (user) {
       res.json(user);
     } else {
@@ -24,14 +27,64 @@ exports.getUserById = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
   }
-};
+};*/
+
+exports.login = async (req, res) => {
+  const { usernameEmail, password } = req.body;
+
+  try {
+    const jwt = await userService.login({ usernameEmail, password });
+    res.status(202).send(jwt);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+}
 
 exports.createUser = async (req, res) => {
-  const { name, email, password, passwordAgain } = req.body;
+  const { username, email, password, passwordAgain } = req.body;
+
   try {
-    const id = uuidv4();
-    const newUser = await db.User.create({ id, name, email, password });
-    res.json(newUser);
+    await userService.createUser({ username, email, password, passwordAgain });
+    res.status(201).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { username, email } = req.body;
+
+  try {
+    await userService.updateUser(id, { username, email });
+    res.status(200);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+exports.updatePassword = async (req, res) => {
+  const { id } = req.params;
+  const { passwordOld, password, passwordAgain } = req.body;
+
+  try {
+    await userService.updatePassword(id, { passwordOld, password, passwordAgain });
+    res.status(200).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await userService.deleteUser(id);
+    res.status(200).send();
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
