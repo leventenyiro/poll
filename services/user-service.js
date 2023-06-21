@@ -68,7 +68,7 @@ exports.updateUser = async (id, userData) => {
 
         await user.save();
 
-        return user;
+        return "";
     } catch (error) {
         throw new Error('Failed to update user!');
     }

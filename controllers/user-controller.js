@@ -70,12 +70,11 @@ exports.createUser = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
-  const { id } = req.params;
   const { username, email } = req.body;
 
   try {
-    await userService.updateUser(id, { username, email });
-    res.status(200);
+    await userService.updateUser(req.userId, { username, email });
+    res.status(200).send();
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
