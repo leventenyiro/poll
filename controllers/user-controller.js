@@ -12,6 +12,7 @@ const userService = require('../services/user-service');
 
 /*exports.getUserById = async (req, res) => {
   const { id } = req.params;
+
   try {
     const user = await db.User.findOne({
       where: { id },
@@ -28,6 +29,21 @@ const userService = require('../services/user-service');
     res.status(500).json({ message: 'Server Error' });
   }
 };*/
+
+exports.getUser = async (req, res) => {
+  try {
+    const user = await userService.getUser(req.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+}
 
 exports.login = async (req, res) => {
   const { usernameEmail, password } = req.body;
@@ -54,12 +70,11 @@ exports.createUser = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
-  const { id } = req.params;
   const { username, email } = req.body;
 
   try {
-    await userService.updateUser(id, { username, email });
-    res.status(200);
+    await userService.updateUser(req.userId, { username, email });
+    res.status(200).send();
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
@@ -67,11 +82,10 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.updatePassword = async (req, res) => {
-  const { id } = req.params;
   const { passwordOld, password, passwordAgain } = req.body;
 
   try {
-    await userService.updatePassword(id, { passwordOld, password, passwordAgain });
+    await userService.updatePassword(req.userId, { passwordOld, password, passwordAgain });
     res.status(200).send();
   } catch (error) {
     console.error(error);
@@ -80,10 +94,8 @@ exports.updatePassword = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
-  const { id } = req.params;
-
   try {
-    await userService.deleteUser(id);
+    await userService.deleteUser(req.userId);
     res.status(200).send();
   } catch (error) {
     console.error(error);

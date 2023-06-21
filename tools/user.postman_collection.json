@@ -1,0 +1,181 @@
+{
+	"info": {
+		"_postman_id": "a33ff034-901e-494f-9bf2-bca8998335af",
+		"name": "user",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6123569",
+		"_collection_link": "https://www.postman.com/leventenyiro/workspace/poll/collection/6123569-a33ff034-901e-494f-9bf2-bca8998335af?action=share&creator=6123569&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "registration",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"leventenyiro\",\r\n  \"email\": \"test@test.com\",\r\n  \"password\": \"Valami1212\",\r\n  \"passwordAgain\": \"Valami1212\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/user",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"usernameEmail\": \"leventenyiro\",\r\n    \"password\": \"Valami1212\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/user/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUser",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"leventenyiro\",\r\n    \"email\": \"test1@test.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/user",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updatePassword",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4ZWZjZTAwZS0yYjliLTQwNDEtOTU0Yy01ODI5Njk1NDAzMGIiLCJpYXQiOjE2ODczNTQyMjQsImV4cCI6MTY4Nzk1OTAyNH0.FW-o9k3_l8Sp6UN4h2K5oAdoXi1MwKC4_yEkSTHPDKM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"passwordOld\": \"Valami1212\",\r\n    \"password\": \"Valami12\",\r\n    \"passwordAgain\": \"Valami12\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/user/password",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4ZWZjZTAwZS0yYjliLTQwNDEtOTU0Yy01ODI5Njk1NDAzMGIiLCJpYXQiOjE2ODY5MjA4ODgsImV4cCI6MTY4NzUyNTY4OH0.QoPQsZ0UeIn2jZyiFArt9vyvlfGlDoiiTe2IUxhlEGE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/user",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4ZWZjZTAwZS0yYjliLTQwNDEtOTU0Yy01ODI5Njk1NDAzMGIiLCJpYXQiOjE2ODczNTQyMjQsImV4cCI6MTY4Nzk1OTAyNH0.FW-o9k3_l8Sp6UN4h2K5oAdoXi1MwKC4_yEkSTHPDKM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{ url }}/user",
+					"host": [
+						"{{ url }}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

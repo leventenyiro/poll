@@ -1,9 +1,18 @@
 const bcrypt = require('bcrypt');
 const db = require('../models');
 const { v4: uuidv4 } = require('uuid');
-require('dotenv').config();
 const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
+exports.getUser = async (id) => {
+    const user = await db.User.findOne({
+        where: { id },
+        attributes: ['username', 'email']
+    });
+
+    return user;
+};
 
 exports.login = async (userData) => {
     const { usernameEmail, password } = userData;
@@ -59,7 +68,7 @@ exports.updateUser = async (id, userData) => {
 
         await user.save();
 
-        return user;
+        return "";
     } catch (error) {
         throw new Error('Failed to update user!');
     }
@@ -77,13 +86,13 @@ exports.updatePassword = async (id, userData) => {
 
         await isPasswordValid(passwordOld, user.password);
 
-        const hashedPassword = createPassword(password, passwordAgain);
+        const hashedPassword = await createPassword(password, passwordAgain);
 
         user.password = hashedPassword || user.password;
 
         await user.save();
 
-        return user;
+        return "";
     } catch (error) {
         throw new Error('Failed to update password!');
     }
@@ -97,7 +106,7 @@ exports.deleteUser = async (id) => {
             throw new Error('User not found!');
         }
 
-        user.delete();
+        user.destroy();
 
         return user;
     } catch (error) {
