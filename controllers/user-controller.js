@@ -82,11 +82,10 @@ exports.updateUser = async (req, res) => {
 };
 
 exports.updatePassword = async (req, res) => {
-  const { id } = req.params;
   const { passwordOld, password, passwordAgain } = req.body;
 
   try {
-    await userService.updatePassword(id, { passwordOld, password, passwordAgain });
+    await userService.updatePassword(req.userId, { passwordOld, password, passwordAgain });
     res.status(200).send();
   } catch (error) {
     console.error(error);

@@ -86,13 +86,13 @@ exports.updatePassword = async (id, userData) => {
 
         await isPasswordValid(passwordOld, user.password);
 
-        const hashedPassword = createPassword(password, passwordAgain);
+        const hashedPassword = await createPassword(password, passwordAgain);
 
         user.password = hashedPassword || user.password;
 
         await user.save();
 
-        return user;
+        return "";
     } catch (error) {
         throw new Error('Failed to update password!');
     }
