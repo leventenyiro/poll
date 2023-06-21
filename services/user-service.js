@@ -106,7 +106,7 @@ exports.deleteUser = async (id) => {
             throw new Error('User not found!');
         }
 
-        user.delete();
+        user.destroy();
 
         return user;
     } catch (error) {

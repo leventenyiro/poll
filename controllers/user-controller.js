@@ -94,10 +94,8 @@ exports.updatePassword = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
-  const { id } = req.params;
-
   try {
-    await userService.deleteUser(id);
+    await userService.deleteUser(req.userId);
     res.status(200).send();
   } catch (error) {
     console.error(error);

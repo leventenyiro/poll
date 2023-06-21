@@ -10,6 +10,6 @@ router.post('/', userController.createUser);
 router.put('/', auth.jwtMiddleware, userController.updateUser);
 router.post('/login', userController.login);
 router.put('/password', auth.jwtMiddleware, userController.updatePassword);
-// router.delete('/', userController.deleteUser);
+router.delete('/', auth.jwtMiddleware, userController.deleteUser);
 
 module.exports = router;
