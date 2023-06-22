@@ -27,8 +27,9 @@ exports.login = async (userData) => {
         if (!user) {
             throw new Error('Unable to login');
         }
-
+        
         await isPasswordValid(password, user.password);
+
 
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '168h' });
 
